@@ -1,0 +1,109 @@
+파일목록에서 악송코드 파일을 2단계로 제거하는 프로그램
+
+<첫번째 함수>
+1. 확장자 포함 여부 판단
+   - 확장자 있는 파일만 리스트에 담기
+   
+   - 문자열에서 포함 여부 판단 방법
+   
+     if ( data.indexOf(".") > -1 )
+
+
+
+<두번째 함수>
+1. 파일명만 잘라내기
+   - 문자열의 일부 문자열 잘라내기 방법
+   
+   String tmp = data.substring(0, data.lastIndexOf("."));
+   1.보고서.ppt
+
+2. 파일명에 a 또는 x 포함 여부 판단
+   - 포함되었으면 악성코드로 판단
+   - a 또는 x 가 포함되어 있지만 악성코드가 아닌 예외 경우
+	   - a 바로뒤에 b가 있는 경우
+	   - x 바로뒤에 y가 있는 경우
+	   - a 바로뒤에 x가 있는 경우
+   
+      String tmp = data.substring(0, data.lastIndexOf("."));					
+			
+	 if ( tmp.indexOf("a") > -1 || tmp.indexOf("x") > -1 ) {							
+		if ( (tmp.indexOf("ax") > -1)  ||  (tmp.indexOf("ab") > -1) || (tmp.indexOf("xy") > -1) ){ 
+				secondCodeNameList.add(data);
+		}
+	 } else {
+			secondCodeNameList.add(data);
+	 }
+
+
+
+package com.lgcns.tct.malware;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Malware {
+	/**
+	 * 1단계 악성코드 제거
+	 * 
+     * @param		inputData				List		입력데이터(코드 문자열 목록)
+     * @return								List		1단계 악성코드가 제거된 문자열 목록
+	 */
+	public List<String> getFirstCode(List<String> inputData){
+		List<String> firstCodeNameList = null;
+		//////////////////////여기부터 구현 (1) ---------------->
+		firstCodeNameList = new ArrayList<String>();
+		for(String data : inputData){
+			if(data.indexOf(".")>-1){
+				firstCodeNameList.add(data);
+			}
+		}
+		
+		
+		
+		///////////////////////////// <-------------- 여기까지 구현 (1)
+		return firstCodeNameList;
+	}
+	
+	/**
+	 * 2단계 악성코드 제거
+	 * 
+     * @param		firstCodeNameList			List		1단계 악성코드가 제거된 문자열 목록
+     * @return									List		2단계 악성코드가 제거된 문자열 목록
+	 */
+	public List<String> getSecondCode(List<String> firstCodeNameList){
+		List<String> secondCodeNameList = null;
+		//////////////////////여기부터 구현 (2) ---------------->
+		
+		secondCodeNameList = new ArrayList<String>();
+		for(String data:firstCodeNameList){
+			String tmp = data.substring(0, data.lastIndexOf("."));
+			
+			if(tmp.indexOf("a")>-1 || tmp.indexOf("x")>-1){
+				if(tmp.indexOf("ax")>-1 || tmp.indexOf("ab")>-1 || tmp.indexOf("xy")>-1){
+					secondCodeNameList.add(data);
+				}
+			}else{
+				secondCodeNameList.add(data);
+			}
+		}
+		
+		
+		
+		///////////////////////////// <-------------- 여기까지 구현 (2)
+		return secondCodeNameList;
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
